@@ -1,42 +1,42 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHomeFetch } from "../Hooks/UseHomeFetch";
 import { BACKDROP_SIZE, IMAGE_BASE_URL, POSTER_SIZE } from "../API/config";
-import Search from "../component/Search";
 import Grid from "../component/Grid";
 import Banner from "../component/Banner";
 import Thumb from "../component/Thumb";
-
+import { MoviesContext } from "../Context/movieProvider";
 // import {AiOutlineLoading3Quarters} from "react-icons/ai"
 import Spinner from "../component/Spanner";
+import SearchBar from "../component/Search";
+
 
 
 
 const Home = () => {
-    const { state, error,loading, searchTerm, setSearchTerm } = useHomeFetch();
+    const { state, error, loading, searchTerm, setSearchTerm } = useContext(MoviesContext);
+  console.log(state,'in home')
 
-   
-    
+
+
     if (error) return <div>Something went wrong!</div>
     // if (loading) return <AiOutlineLoading3Quarters />
-    
+
     return (
-        <> 
-                   {!searchTerm && state.results[0] ?
+        <>
+            {!searchTerm && state.results[0] ?
                 <Banner
                     image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${state.results[0].backdrop_path}`}
                     title={state.results[0].original_title}
                     text={state.results[0].overview}
 
-                   
-
                 />
                 : null
 
             }
-             
-            <Search setSearchTerm={setSearchTerm} />
+
+            <SearchBar setSearchTerm={setSearchTerm} />
             <Grid header={searchTerm ? "your search result" : "Popular movies"} >
-                
+
 
                 {
                     state.results.map(movie =>
@@ -52,17 +52,17 @@ const Home = () => {
             </Grid>
             {loading &&
                 <Spinner />
-            
+
             }
-   
-      </>
-    
+
+        </>
+
     )
 }
 
 export default Home;
-        
-        
 
 
- 
+
+
+

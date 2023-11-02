@@ -24,7 +24,7 @@ const SearchBar = ({setSearchTerm}) => {
         }
         const timer = setTimeout(()=>{
             setSearchTerm(state);
-        },500)
+        },1000)
 
         return () => clearTimeout(timer);
     },[setSearchTerm,state]);
@@ -52,4 +52,4 @@ SearchBar.propTypes = {
 }
 
 
-export default SearchBar;
+ export default SearchBar;

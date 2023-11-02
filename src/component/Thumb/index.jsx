@@ -1,14 +1,17 @@
 import React from "react";
 import { Image } from "./thumb.styles";
 
-const Thumb=({image,movieid,clickable})=>(
+const Thumb = ({ image, movieId, clickable }) => (
 
     <>
-   <Image  src={image}>
+        {clickable ? <a href={`/${movieId}` }>
+            <Image src={image} />
+
+        </a> : <Image src={image} />
+        }
 
 
-   </Image>
-    
+
     </>
 );
 

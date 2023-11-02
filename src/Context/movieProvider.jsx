@@ -1,24 +1,32 @@
-import {useState, useEffect} from "react";
-
-//API
+import { useEffect } from "react";
+import { useState } from "react";
+import { createContext } from "react";
 import endpoints from "../API/endpoint";
 
-//Helpers
-// import {isPersistedState} from '../helpers';
+export const MoviesContext = createContext();
+ const initialState={
+     page:0,
+     results:[],
+     total_pages:0,
+     total_results:0,
+ }
 
-const initialState = {
-    page: 0, 
-    results:[],
-    total_pages:0,
-    total_results:0
-}
+ const reducerState={
+     searchTerm:"",
+     loading:false,
+     error:false,
+     movie:initialState,
+     isLoadingMore:false,
+ }
 
-export const useHomeFetch = () => {
+
+export const MoviesProvider = ({children})=>{
     const [searchTerm,setSearchTerm] = useState('');
     const [state, setState] = useState(initialState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+
 
     const fetchMovies = async (page,searchTerm = '') =>{
         try{
@@ -38,17 +46,8 @@ export const useHomeFetch = () => {
 
     }
 
-    //Initial render and search
-
     useEffect(()=>{
-        // if(!searchTerm){
-        //     const sessionState = isPersistedState('homeState');
-
-        //     if(sessionState){
-        //         setState(sessionState);
-        //         return;
-        //     }
-        // }
+       
         setState(initialState);
         fetchMovies(1,searchTerm);
     },[searchTerm]);
@@ -59,17 +58,8 @@ export const useHomeFetch = () => {
         fetchMovies(state.page + 1,searchTerm);
         setIsLoadingMore(false);
     },[isLoadingMore,searchTerm, state.page]);
-
-
-    //write to sessionStorage
-    // useEffect(()=>{
-    //     if(!searchTerm) sessionStorage.setItem('homeState',JSON.stringify(state))
-    // },[searchTerm,state]);
-
-
-    return {state,loading,error,searchTerm,setSearchTerm,setIsLoadingMore};
+      const value={state,loading,error,searchTerm,setSearchTerm,setIsLoadingMore}
+    return <MoviesContext.Provider    value={value}>
+        {children}
+    </MoviesContext.Provider>
 }
-
-
-
-export default useHomeFetch;
